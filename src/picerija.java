@@ -1,5 +1,4 @@
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -7,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -19,7 +19,8 @@ public class picerija {
 
     static ArrayList<pica> _picas = new ArrayList<>();
     static Boolean EXIT=false;
-
+    static ArrayList<Integer> _rejtingi = new ArrayList<>();
+    
     public static void main(String[] args) throws IOException {
 
         SwitchLogin();
@@ -57,7 +58,7 @@ public class picerija {
     static void SwitchDarbinieks() throws IOException {
         int opcija;
         ImageIcon icon = new ImageIcon("photo2.jpg");
-        String[] izvelesDarbinieks= {"Apskatit nodotos pasutijumus","Atpakal"};
+        String[] izvelesDarbinieks= {"Apskatit nodotos pasutijumus","Apskatit Rejtingu","Atpakal"};
         do {
             opcija = JOptionPane.showOptionDialog(null, "Ko tu gribi izdarit?","Darbinieks", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,
                     icon, izvelesDarbinieks, izvelesDarbinieks[0]);
@@ -66,6 +67,9 @@ public class picerija {
                 case 0:
                     ApskatitPasutijumus();
                     break;
+                case 1:
+                	ApskatitRejtingus();
+                	break;
                 default:SwitchLogin();
             }
 
@@ -232,6 +236,15 @@ public class picerija {
             bw.close();
             _picas.clear();
         }else JOptionPane.showMessageDialog(null,"Tev nav PICAS!!!","EROR", JOptionPane.ERROR_MESSAGE);
+        
+        String[] opcijasRejting = {"1","2","3","4","5"};
+        
+        String rejtings  = (String) JOptionPane.showInputDialog(null,"Kadu Rejtingu tu gribi ielikt?",
+                "Izveide",JOptionPane.QUESTION_MESSAGE,null,opcijasRejting,opcijasRejting[0]);
+        
+        
+        int izveletaisIndeks = Arrays.asList(opcijasRejting).indexOf(rejtings)+1;
+        _rejtingi.add(izveletaisIndeks);
     }
 
 
@@ -253,6 +266,22 @@ public class picerija {
         JOptionPane.showMessageDialog(null, scrollPane,"PASUTIJUMI",JOptionPane.PLAIN_MESSAGE);
 
         br.close();
+    }
+    
+    static void ApskatitRejtingus() {
+    	
+    	double average = 0;
+    	if (_rejtingi.size() > 0) {
+    	    double sum = 0;
+    	    for (int j = 0; j < _rejtingi.size(); j++) {
+    	        sum += _rejtingi.get(j);
+    	    }
+    	    average = sum / _rejtingi.size();
+    	}
+    	
+    	if(average==0) {
+    		JOptionPane.showMessageDialog(null, "Sodien tavai picerijai nebija pasutijumus!!!","eror",JOptionPane.ERROR_MESSAGE);
+    	}else JOptionPane.showMessageDialog(null,"Sodien rejtings tavai picerijai ir: "+average,"Rejtings",JOptionPane.INFORMATION_MESSAGE);
     }
 
 }
